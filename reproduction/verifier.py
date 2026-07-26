@@ -49,20 +49,71 @@ def claim1() -> dict[str, Any]:
     }
 
 
+def _positive_grid(outcomes: int, denominator: int) -> list[list[float]]:
+    points: list[list[float]] = []
+
+    def visit(prefix: list[int], remaining: int) -> None:
+        if len(prefix) == outcomes - 1:
+            if remaining >= 1:
+                points.append([value / denominator for value in [*prefix, remaining]])
+            return
+        for value in range(1, remaining - (outcomes - len(prefix) - 1) + 1):
+            visit([*prefix, value], remaining - value)
+
+    visit([], denominator)
+    return points
+
+
 def claim2_toy(rng: random.Random) -> dict[str, Any]:
-    trials = 4_000
+    del rng
+    denominator = 12
+    outcomes = 3
+    grid = _positive_grid(outcomes, denominator)
+    cases = 0
     strict_cases = 0
-    for outcomes in (2, 3):
-        for _ in range(trials // 2):
-            agents = [_random_distribution(rng, outcomes) for _ in range(2)]
-            pool = linear_pool(agents, [0.5, 0.5])
-            strict_cases += int(all(welfare_gap(agent, pool) > 0.0 for agent in agents))
+    worst_min_gap = -math.inf
+    for left_index, left in enumerate(grid):
+        for right in grid[left_index + 1 :]:
+            for numerator in range(1, denominator):
+                weights = [numerator / denominator, 1.0 - numerator / denominator]
+                pool = linear_pool([left, right], weights)
+                gaps = [welfare_gap(agent, pool) for agent in (left, right)]
+                strict_cases += int(min(gaps) > 1e-14)
+                worst_min_gap = max(worst_min_gap, min(gaps))
+                cases += 1
+
+    # Mutation control: replacing both welfare gaps by their absolute values
+    # creates false "strict unanimity" for at least one distinct pair.
+    mutation_detected = False
+    for left_index, left in enumerate(grid):
+        for right in grid[left_index + 1 :]:
+            pool = linear_pool([left, right], [0.5, 0.5])
+            gaps = [welfare_gap(agent, pool) for agent in (left, right)]
+            if min(abs(gap) for gap in gaps) > 1e-10:
+                mutation_detected = True
+                break
+        if mutation_detected:
+            break
+
     return {
-        "status": "TOY",
-        "passed": strict_cases == 0,
-        "trials": trials,
+        "status": "BLOCKED",
+        "passed": strict_cases == 0 and mutation_detected,
+        "scope": (
+            "complete grid for two agents, three outcomes, probabilities and "
+            "positive weights in multiples of 1/12"
+        ),
+        "grid_points": len(grid),
+        "cases": cases,
         "strict_unanimity_cases": strict_cases,
-        "limitation": "Finite sampling cannot verify a universally quantified impossibility.",
+        "largest_observed_minimum_gap": worst_min_gap,
+        "negative_control": {
+            "mutation": "replace signed welfare gaps by absolute values",
+            "detected": mutation_detected,
+        },
+        "limitation": (
+            "Exhaustion of this finite rational grid cannot establish the "
+            "paper's universal theorem over every finite outcome space and real-valued belief."
+        ),
     }
 
 
@@ -131,7 +182,7 @@ def run_all() -> dict[str, Any]:
         "claim_6": claim6_toy(),
     }
     return {
-        "campaign_stage": "historical_rejected_baseline",
+        "campaign_stage": "claim_2_exhaustive_finite_audit",
         "seed": SEED,
         "claims": claims,
         "full_credit_claims": sum(item["status"] in {"VERIFIED", "FALSIFIED"} for item in claims.values()),
