@@ -9,14 +9,17 @@ from typing import Any
 from .independent_checker import (
     claim2_decimal_certificate,
     claim3_decimal_witness,
+    claim4_decimal_counterexample,
 )
 from .math_core import (
+    centered_log_profile,
     entropy,
     epistemic_utility,
     kl_divergence,
     linear_pool,
     log_pool,
     normalize,
+    weighted_inner,
     welfare_gap,
 )
 
@@ -301,18 +304,128 @@ def claim3(rng: random.Random) -> dict[str, Any]:
     }
 
 
-def claim4_toy() -> dict[str, Any]:
-    benevolent_weights = [value / 10 for value in range(1, 10)]
-    antagonist_weights = [0.3 + 0.15 * value for value in benevolent_weights]
-    monotone = all(
-        right > left for left, right in zip(antagonist_weights, antagonist_weights[1:])
+def claim4() -> dict[str, Any]:
+    # Any centered vector is a valid centered log-profile under a uniform base
+    # after softmax. H and A are aligned duplicates; W is anti-aligned.
+    profiles = [
+        [1.0, -1.0, 0.0],
+        [1.0, -1.0, 0.0],
+        [-1.0, 1.0, 0.0],
+    ]
+    agents = [normalize([math.exp(value) for value in profile]) for profile in profiles]
+    base_weights = [0.25, 0.25, 0.5]
+    delta_weights = [0.05, -0.05, 0.0]
+    new_weights = [
+        weight + change for weight, change in zip(base_weights, delta_weights)
+    ]
+    base_pool = log_pool(agents, base_weights)
+    new_pool = log_pool(agents, new_weights)
+    visible_profiles = [
+        centered_log_profile(agent, base_pool) for agent in agents
+    ]
+    h_profile = visible_profiles[0]
+    inner_products = [
+        weighted_inner(base_pool, profile, h_profile)
+        for profile in visible_profiles
+    ]
+    h_norm_sq = weighted_inner(base_pool, h_profile, h_profile)
+    delta_log_profile = [
+        math.fsum(
+            change * profile[outcome]
+            for change, profile in zip(delta_weights, visible_profiles)
+        )
+        for outcome in range(3)
+    ]
+    epsilon = math.sqrt(
+        weighted_inner(base_pool, delta_log_profile, delta_log_profile)
+    )
+    remainder_norm = 0.0
+    anti_indices = [
+        index for index, value in enumerate(inner_products) if value < 0.0
+    ]
+    aligned_indices = [
+        index for index, value in enumerate(inner_products) if value >= 0.0
+    ]
+    lhs = math.fsum(
+        max(delta_weights[index], 0.0) * abs(inner_products[index])
+        for index in anti_indices
+    )
+    aligned_downweight_term = math.fsum(
+        max(-delta_weights[index], 0.0) * inner_products[index]
+        for index in aligned_indices
+    )
+    rhs = (
+        delta_weights[0] * h_norm_sq
+        - (epsilon + remainder_norm) * math.sqrt(h_norm_sq)
+        - aligned_downweight_term
+    )
+    mutated_rhs = (
+        delta_weights[0] * h_norm_sq
+        - (epsilon + remainder_norm) * math.sqrt(h_norm_sq)
+    )
+    pool_shift = max(
+        abs(left - right) for left, right in zip(base_pool, new_pool)
+    )
+    broad_conclusion_holds = any(
+        delta_weights[index] > 0.0 for index in anti_indices
+    )
+    independent = claim4_decimal_counterexample()
+    passed = (
+        math.isclose(math.fsum(delta_weights), 0.0, abs_tol=1e-14)
+        and delta_weights[0] > 0.0
+        and pool_shift < 1e-14
+        and len(anti_indices) == 1
+        and lhs + 1e-14 >= rhs
+        and lhs + 1e-14 < mutated_rhs
+        and not broad_conclusion_holds
+        and independent["passed"]
     )
     return {
-        "status": "TOY",
-        "passed": monotone,
-        "benevolent_weights": benevolent_weights,
-        "antagonist_weights": antagonist_weights,
-        "limitation": "This historical affine proxy does not encode theorem 19's compensation inequality.",
+        "status": "FALSIFIED" if passed else "BLOCKED",
+        "passed": passed,
+        "claim_tested": (
+            "Under stable logit deviation, increasing a benevolent component "
+            "necessarily strengthens an antagonistic counterpart."
+        ),
+        "counterexample": {
+            "outcomes": 3,
+            "component_names": ["H_benevolent", "A_aligned_duplicate", "W_antagonist"],
+            "agents": agents,
+            "base_weights": base_weights,
+            "delta_weights": delta_weights,
+            "new_weights": new_weights,
+            "base_pool": base_pool,
+            "new_pool": new_pool,
+            "pool_shift_max": pool_shift,
+            "inner_products_with_H": inner_products,
+            "anti_aligned_indices": anti_indices,
+            "waluigi_weight_change": delta_weights[2],
+            "broad_conclusion_holds": broad_conclusion_holds,
+        },
+        "exact_theorem_19_audit": {
+            "epsilon": epsilon,
+            "remainder_norm": remainder_norm,
+            "lhs_anti_aligned_increases": lhs,
+            "aligned_downweight_term": aligned_downweight_term,
+            "rhs": rhs,
+            "inequality_holds": lhs + 1e-14 >= rhs,
+            "special_consequence_applicable": False,
+            "why_not": (
+                "the aligned duplicate A is downweighted; Theorem 19's "
+                "strict W consequence explicitly excludes aligned downweighting"
+            ),
+        },
+        "independent_checker": independent,
+        "negative_control": {
+            "mutation": "omit the aligned-downweight term from inequality (3)",
+            "mutated_rhs": mutated_rhs,
+            "detected": lhs + 1e-14 < mutated_rhs,
+        },
+        "interpretation": (
+            "The general compensation inequality is satisfied exactly. The "
+            "broader judged wording is false because it omits the theorem's "
+            "additional no-aligned-downweighting and positive-margin conditions."
+        ),
     }
 
 
@@ -344,12 +457,12 @@ def run_all() -> dict[str, Any]:
         "claim_1": claim1(),
         "claim_2": claim2(rng),
         "claim_3": claim3(rng),
-        "claim_4": claim4_toy(),
+        "claim_4": claim4(),
         "claim_5": claim5_toy(),
         "claim_6": claim6_toy(),
     }
     return {
-        "campaign_stage": "claim_3_constructive_log_pooling",
+        "campaign_stage": "claim_4_compensation_law_audit",
         "seed": SEED,
         "claims": claims,
         "full_credit_claims": sum(item["status"] in {"VERIFIED", "FALSIFIED"} for item in claims.values()),

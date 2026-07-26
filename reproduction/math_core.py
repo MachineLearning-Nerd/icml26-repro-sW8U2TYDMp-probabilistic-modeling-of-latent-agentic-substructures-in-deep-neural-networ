@@ -57,6 +57,27 @@ def welfare_gap(agent: Vector, pool: Vector) -> float:
     return expectation(pool, utilities) - expectation(agent, utilities)
 
 
+def centered_log_profile(agent: Vector, reference: Vector) -> list[float]:
+    """The paper's v_i = log P_i - E_reference[log P_i]."""
+    validate_distribution(agent)
+    validate_distribution(reference)
+    if len(agent) != len(reference):
+        raise ValueError("dimension mismatch")
+    log_values = [math.log(value) for value in agent]
+    center = expectation(reference, log_values)
+    return [value - center for value in log_values]
+
+
+def weighted_inner(reference: Vector, left: Vector, right: Vector) -> float:
+    validate_distribution(reference)
+    if len(reference) != len(left) or len(left) != len(right):
+        raise ValueError("dimension mismatch")
+    return math.fsum(
+        probability * left_value * right_value
+        for probability, left_value, right_value in zip(reference, left, right)
+    )
+
+
 def linear_pool(agents: Sequence[Vector], weights: Vector) -> list[float]:
     _validate_pool_inputs(agents, weights)
     result = [

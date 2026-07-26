@@ -143,3 +143,122 @@ def claim3_decimal_witness() -> dict[str, Any]:
             "wrong_linear_pool_gaps": [str(value) for value in linear_gaps],
             "passed": passed,
         }
+
+
+def claim4_decimal_counterexample() -> dict[str, Any]:
+    """Independently audit Theorem 19 and the broader claimed consequence."""
+    with localcontext() as context:
+        context.prec = 70
+        zero = Decimal(0)
+        profiles = [
+            [Decimal(1), Decimal(-1), zero],   # H (Luigi)
+            [Decimal(1), Decimal(-1), zero],   # aligned duplicate
+            [Decimal(-1), Decimal(1), zero],   # W (anti-aligned)
+        ]
+
+        def softmax(profile: list[Decimal]) -> list[Decimal]:
+            raw = [value.exp() for value in profile]
+            total = sum(raw, zero)
+            return [value / total for value in raw]
+
+        def log_pool(
+            agents: list[list[Decimal]], weights: list[Decimal]
+        ) -> list[Decimal]:
+            raw = [
+                sum(
+                    (
+                        weight * agent[outcome].ln()
+                        for weight, agent in zip(weights, agents)
+                    ),
+                    zero,
+                ).exp()
+                for outcome in range(3)
+            ]
+            total = sum(raw, zero)
+            return [value / total for value in raw]
+
+        agents = [softmax(profile) for profile in profiles]
+        base_weights = [Decimal("0.25"), Decimal("0.25"), Decimal("0.50")]
+        delta_weights = [Decimal("0.05"), Decimal("-0.05"), zero]
+        new_weights = [
+            value + change for value, change in zip(base_weights, delta_weights)
+        ]
+        base_pool = log_pool(agents, base_weights)
+        new_pool = log_pool(agents, new_weights)
+
+        def centered_profile(
+            agent: list[Decimal], reference: list[Decimal]
+        ) -> list[Decimal]:
+            logs = [value.ln() for value in agent]
+            center = sum(
+                (probability * value for probability, value in zip(reference, logs)),
+                zero,
+            )
+            return [value - center for value in logs]
+
+        visible_profiles = [
+            centered_profile(agent, base_pool) for agent in agents
+        ]
+
+        def inner(left: list[Decimal], right: list[Decimal]) -> Decimal:
+            return sum(
+                (
+                    probability * left_value * right_value
+                    for probability, left_value, right_value in zip(
+                        base_pool, left, right
+                    )
+                ),
+                zero,
+            )
+
+        h_profile = visible_profiles[0]
+        inner_products = [inner(profile, h_profile) for profile in visible_profiles]
+        h_norm_sq = inner(h_profile, h_profile)
+        delta_log_profile = [
+            sum(
+                (
+                    change * profile[outcome]
+                    for change, profile in zip(delta_weights, visible_profiles)
+                ),
+                zero,
+            )
+            for outcome in range(3)
+        ]
+        epsilon = inner(delta_log_profile, delta_log_profile).sqrt()
+        lhs = max(delta_weights[2], zero) * abs(inner_products[2])
+        aligned_downweight = (
+            max(-delta_weights[1], zero) * inner_products[1]
+        )
+        rhs = (
+            delta_weights[0] * h_norm_sq
+            - epsilon * h_norm_sq.sqrt()
+            - aligned_downweight
+        )
+        mutated_rhs = (
+            delta_weights[0] * h_norm_sq - epsilon * h_norm_sq.sqrt()
+        )
+        pool_shift = max(
+            abs(left - right) for left, right in zip(base_pool, new_pool)
+        )
+        tolerance = Decimal("1e-60")
+        passed = (
+            inner_products[2] < 0
+            and delta_weights[2] == 0
+            and pool_shift < tolerance
+            and lhs + tolerance >= rhs
+            and lhs + tolerance < mutated_rhs
+        )
+        return {
+            "checker": "independent Decimal log-pool audit, precision=70",
+            "base_weights": [str(value) for value in base_weights],
+            "delta_weights": [str(value) for value in delta_weights],
+            "base_pool": [str(value) for value in base_pool],
+            "new_pool": [str(value) for value in new_pool],
+            "pool_shift_max": str(pool_shift),
+            "inner_products_with_H": [str(value) for value in inner_products],
+            "waluigi_weight_change": str(delta_weights[2]),
+            "theorem_lhs": str(lhs),
+            "theorem_rhs": str(rhs),
+            "omit_aligned_downweight_term_rhs": str(mutated_rhs),
+            "passed": passed,
+        }

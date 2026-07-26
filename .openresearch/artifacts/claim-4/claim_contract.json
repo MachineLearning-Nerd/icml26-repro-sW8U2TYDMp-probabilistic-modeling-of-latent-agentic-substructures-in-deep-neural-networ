@@ -1,0 +1,13 @@
+{
+  "claim": 4,
+  "paper_anchor": "Section 5, Theorem 19; Appendix I.2, Theorem 69",
+  "judged_wording": "Under compositional stability, manifesting a benevolent persona necessarily strengthens an antagonistic counterpart.",
+  "theorem_general_conclusion": "A compensation inequality including an aligned-downweight subtraction term.",
+  "strict_special_case_assumptions": [
+    "W is the only anti-aligned component",
+    "aligned components are not downweighted",
+    "epsilon + ||r||_P < delta ||v_H||_P"
+  ],
+  "falsification_target": "the broad judged wording without those special-case assumptions",
+  "verdict_if_counterexample_passes": "FALSIFIED"
+}
