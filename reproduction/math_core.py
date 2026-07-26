@@ -78,6 +78,52 @@ def weighted_inner(reference: Vector, left: Vector, right: Vector) -> float:
     )
 
 
+def project_onto_span(
+    reference: Vector, target: Vector, basis: Sequence[Vector]
+) -> list[float]:
+    """Weighted least-squares projection using a visible Gram solve."""
+    validate_distribution(reference)
+    if len(target) != len(reference):
+        raise ValueError("dimension mismatch")
+    if not basis:
+        return [0.0] * len(reference)
+    if any(len(vector) != len(reference) for vector in basis):
+        raise ValueError("dimension mismatch")
+    gram = [
+        [weighted_inner(reference, left, right) for right in basis]
+        for left in basis
+    ]
+    rhs = [weighted_inner(reference, vector, target) for vector in basis]
+
+    # Gauss-Jordan elimination with pivoting. Experimental bases are small;
+    # explicit arithmetic keeps the verifier dependency-free and inspectable.
+    augmented = [row[:] + [value] for row, value in zip(gram, rhs)]
+    size = len(basis)
+    for column in range(size):
+        pivot = max(range(column, size), key=lambda row: abs(augmented[row][column]))
+        if abs(augmented[pivot][column]) < 1e-14:
+            raise ValueError("basis is linearly dependent")
+        augmented[column], augmented[pivot] = augmented[pivot], augmented[column]
+        scale = augmented[column][column]
+        augmented[column] = [value / scale for value in augmented[column]]
+        for row in range(size):
+            if row == column:
+                continue
+            factor = augmented[row][column]
+            augmented[row] = [
+                left - factor * right
+                for left, right in zip(augmented[row], augmented[column])
+            ]
+    coefficients = [augmented[index][-1] for index in range(size)]
+    return [
+        math.fsum(
+            coefficient * vector[outcome]
+            for coefficient, vector in zip(coefficients, basis)
+        )
+        for outcome in range(len(reference))
+    ]
+
+
 def linear_pool(agents: Sequence[Vector], weights: Vector) -> list[float]:
     _validate_pool_inputs(agents, weights)
     result = [

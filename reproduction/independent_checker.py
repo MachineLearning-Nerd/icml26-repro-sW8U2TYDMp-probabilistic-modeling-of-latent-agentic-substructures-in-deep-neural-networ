@@ -262,3 +262,75 @@ def claim4_decimal_counterexample() -> dict[str, Any]:
             "omit_aligned_downweight_term_rhs": str(mutated_rhs),
             "passed": passed,
         }
+
+
+def claim5_decimal_geometry() -> dict[str, Any]:
+    """Independently check the weighted projection identities for Claim 5."""
+    with localcontext() as context:
+        context.prec = 70
+        quarter = Decimal("0.25")
+        zero = Decimal(0)
+        epsilon = Decimal("0.20")
+        g = [Decimal("0.75"), Decimal("-0.25"), Decimal("-0.25"), Decimal("-0.25")]
+        h = [Decimal(-1), Decimal(1), Decimal(-1), Decimal(1)]
+        w = [Decimal(3), Decimal(-1), Decimal(-1), Decimal(-1)]
+
+        def inner(left: list[Decimal], right: list[Decimal]) -> Decimal:
+            return sum(
+                (quarter * x * y for x, y in zip(left, right)),
+                zero,
+            )
+
+        h_norm_sq = inner(h, h)
+        projection_coefficient = inner(w, h) / h_norm_sq
+        u = [
+            value - projection_coefficient * direction
+            for value, direction in zip(w, h)
+        ]
+        u_norm_sq = inner(u, u)
+        g_u = inner(g, u)
+        pure_projection_norm_sq = inner(g, h) ** 2 / h_norm_sq
+        shatter_projection_norm_sq = (
+            pure_projection_norm_sq + g_u**2 / u_norm_sq
+        )
+        pure = epsilon * pure_projection_norm_sq.sqrt()
+        shatter = epsilon * shatter_projection_norm_sq.sqrt()
+        proposition_residual = (
+            shatter_projection_norm_sq
+            - pure_projection_norm_sq
+            - g_u**2 / u_norm_sq
+        )
+        inside_w = [Decimal(2) * value for value in h]
+        inside_coefficient = inner(inside_w, h) / h_norm_sq
+        inside_u = [
+            value - inside_coefficient * direction
+            for value, direction in zip(inside_w, h)
+        ]
+        inside_u_norm_sq = inner(inside_u, inside_u)
+        orthogonal_u = [zero, Decimal(1), zero, Decimal(-1)]
+        orthogonal_correlation = inner(g, orthogonal_u)
+        passed = (
+            u_norm_sq > 0
+            and g_u != 0
+            and shatter > pure
+            and abs(proposition_residual) < Decimal("1e-60")
+            and inside_u_norm_sq == 0
+            and orthogonal_correlation == 0
+        )
+        return {
+            "checker": "independent Decimal weighted geometry, precision=70",
+            "epsilon": str(epsilon),
+            "g_A": [str(value) for value in g],
+            "baseline_H": [str(value) for value in h],
+            "waluigi_w": [str(value) for value in w],
+            "novel_u": [str(value) for value in u],
+            "u_norm_sq": str(u_norm_sq),
+            "g_u_inner": str(g_u),
+            "pure_max_reduction": str(pure),
+            "shatter_max_reduction": str(shatter),
+            "strict_gain": str(shatter - pure),
+            "pythagorean_residual": str(proposition_residual),
+            "inside_span_u_norm_sq": str(inside_u_norm_sq),
+            "orthogonal_novelty_correlation": str(orthogonal_correlation),
+            "passed": passed,
+        }

@@ -1,0 +1,11 @@
+{
+  "claim": 5,
+  "paper_anchor": "Section 5.1, Theorem 21; Appendix J, Lemma 71, Proposition 72, Corollary 74, Theorem 75",
+  "base": "strictly positive P and proper event A",
+  "budget": "||Delta L||_P <= epsilon",
+  "baseline": "S0 is the span of available centered log profiles",
+  "elicited_direction": "w with novelty u=w-Proj_S0(w) != 0",
+  "strictness_assumption": "<g_A,u>_P != 0",
+  "conclusion": "maximal first-order suppression over span(S0,w) is strictly larger than over S0",
+  "verdict_if_passed": "VERIFIED"
+}
