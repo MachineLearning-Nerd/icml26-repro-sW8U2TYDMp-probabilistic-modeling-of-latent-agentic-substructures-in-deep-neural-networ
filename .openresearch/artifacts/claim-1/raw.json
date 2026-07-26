@@ -1,8 +1,10 @@
 {
-  "evidence_origin": "immutable judged Space revision 3d065680c4492fdfc5e339a95f8287af6a533ec7",
+  "run_id": "0582e75c-c4ca-494c-ab4d-1f20d9e21559",
+  "git_sha": "883ec79c9ad238a37bfbc5015acc65f37aec6ddd",
   "distribution": [0.3, 0.5, 0.2],
-  "reported_expected_utility": -1.0297,
-  "reported_identity": "E_P[log P] = -H(P)",
-  "judge_verdict": "verified",
-  "note": "This historical raw record is rerun by the baseline experiment before it is accepted cumulatively."
+  "maximum_log_score_error": 0.0,
+  "entropy_identity_error": 0.0,
+  "negative_control_detected": true,
+  "status": "VERIFIED",
+  "historical_judge_status": "VERIFIED at revision 3d065680c4492fdfc5e339a95f8287af6a533ec7"
 }

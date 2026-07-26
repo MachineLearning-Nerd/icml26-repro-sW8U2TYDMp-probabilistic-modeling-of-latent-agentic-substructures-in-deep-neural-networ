@@ -19,6 +19,34 @@ environment records, `EVAL.md` files, and limitations live beside each linked
 raw file. The pinned environment is
 [`pyproject.toml`](../../pyproject.toml) plus [`uv.lock`](../../uv.lock).
 
-The current verifier is `reproduction/run_all.py`; the combined verifier on
+Direct evidence-bundle links:
+
+- Claim 1: [source](../../evidence/claim-1/source_audit.md),
+  [method](../../evidence/claim-1/method.md),
+  [EVAL](../../evidence/claim-1/EVAL.md),
+  [limitations](../../evidence/claim-1/limitations.md).
+- Claim 2: [source](../../evidence/claim-2/source_audit.md),
+  [method](../../evidence/claim-2/method.md),
+  [EVAL](../../evidence/claim-2/EVAL.md),
+  [limitations](../../evidence/claim-2/limitations.md).
+- Claim 3: [source](../../evidence/claim-3/source_audit.md),
+  [method](../../evidence/claim-3/method.md),
+  [EVAL](../../evidence/claim-3/EVAL.md),
+  [limitations](../../evidence/claim-3/limitations.md).
+- Claim 4: [source](../../evidence/claim-4/source_audit.md),
+  [method](../../evidence/claim-4/method.md),
+  [EVAL](../../evidence/claim-4/EVAL.md),
+  [limitations](../../evidence/claim-4/limitations.md).
+- Claim 5: [source](../../evidence/claim-5/source_audit.md),
+  [method](../../evidence/claim-5/method.md),
+  [EVAL](../../evidence/claim-5/EVAL.md),
+  [limitations](../../evidence/claim-5/limitations.md).
+- Claim 6: [source](../../evidence/claim-6/source_audit.md),
+  [method](../../evidence/claim-6/method.md),
+  [EVAL](../../evidence/claim-6/EVAL.md),
+  [limitations](../../evidence/claim-6/limitations.md).
+
+The current verifier is
+[`reproduction/run_all.py`](../../reproduction/run_all.py); the combined verifier on
 the page titled **Historical rejected baseline** is preserved evidence, not
 the current verification.

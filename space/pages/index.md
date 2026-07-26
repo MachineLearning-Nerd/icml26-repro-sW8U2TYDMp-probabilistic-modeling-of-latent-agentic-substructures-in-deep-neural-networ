@@ -35,7 +35,9 @@ The command is fixed across every experiment. The candidate includes
 [`pyproject.toml`](../pyproject.toml), [`uv.lock`](../uv.lock), the
 complete [`verifier.py`](../reproduction/verifier.py), the independent
 [`independent_checker.py`](../reproduction/independent_checker.py), and the
-[raw cumulative run record](../evidence/run_summary.json).
+executable [`run_all.py`](../reproduction/run_all.py). The
+[raw cumulative run record](../evidence/run_summary.json) captures the
+supervised evidence.
 
 The supervised cumulative run used Git SHA
 `c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4`, deterministic seed `42`,
