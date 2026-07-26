@@ -334,3 +334,105 @@ def claim5_decimal_geometry() -> dict[str, Any]:
             "orthogonal_novelty_correlation": str(orthogonal_correlation),
             "passed": passed,
         }
+
+
+def claim6_decimal_split() -> dict[str, Any]:
+    """Independently reconstruct the compatible exponential split."""
+    with localcontext() as context:
+        context.prec = 70
+        zero = Decimal(0)
+        parent = [Decimal("0.60"), Decimal("0.30"), Decimal("0.10")]
+        t = Decimal("1.50")
+        alpha = Decimal("0.40")
+        lam = Decimal("8.0")
+
+        def normalize_decimal(values: list[Decimal]) -> list[Decimal]:
+            total = sum(values, zero)
+            return [value / total for value in values]
+
+        def power(distribution: list[Decimal], exponent: Decimal) -> list[Decimal]:
+            return normalize_decimal(
+                [(exponent * value.ln()).exp() for value in distribution]
+            )
+
+        def pool(
+            agents: list[list[Decimal]], weights: list[Decimal]
+        ) -> list[Decimal]:
+            return normalize_decimal(
+                [
+                    sum(
+                        (
+                            weight * agent[outcome].ln()
+                            for weight, agent in zip(weights, agents)
+                        ),
+                        zero,
+                    ).exp()
+                    for outcome in range(3)
+                ]
+            )
+
+        def gap(agent: list[Decimal], pooled: list[Decimal]) -> Decimal:
+            return sum(
+                (
+                    (pooled[outcome] - agent[outcome]) * agent[outcome].ln()
+                    for outcome in range(3)
+                ),
+                zero,
+            )
+
+        peer = power(parent, Decimal(2) * t - Decimal(1))
+        pooled_before = pool([parent, peer], [Decimal("0.5"), Decimal("0.5")])
+        expected_power_pool = power(parent, t)
+        g = [-lam, zero, zero]
+        child_one = normalize_decimal(
+            [
+                value * ((Decimal(1) - alpha) * tilt).exp()
+                for value, tilt in zip(parent, g)
+            ]
+        )
+        child_two = normalize_decimal(
+            [
+                value * (-alpha * tilt).exp()
+                for value, tilt in zip(parent, g)
+            ]
+        )
+        reconstructed_parent = pool([child_one, child_two], [alpha, Decimal(1) - alpha])
+        pooled_after = pool(
+            [child_one, child_two, peer],
+            [alpha / Decimal(2), (Decimal(1) - alpha) / Decimal(2), Decimal("0.5")],
+        )
+        parent_gap = gap(parent, pooled_before)
+        child_gap = gap(child_one, pooled_after)
+        pool_shift = max(
+            abs(left - right) for left, right in zip(pooled_before, pooled_after)
+        )
+        reconstruction_error = max(
+            abs(left - right)
+            for left, right in zip(parent, reconstructed_parent)
+        )
+        power_pool_error = max(
+            abs(left - right)
+            for left, right in zip(pooled_before, expected_power_pool)
+        )
+        tolerance = Decimal("1e-60")
+        passed = (
+            parent_gap > 0
+            and child_gap < 0
+            and pool_shift < tolerance
+            and reconstruction_error < tolerance
+            and power_pool_error < tolerance
+        )
+        return {
+            "checker": "independent Decimal compatible split, precision=70",
+            "parent": [str(value) for value in parent],
+            "peer": [str(value) for value in peer],
+            "pool": [str(value) for value in pooled_before],
+            "child_one": [str(value) for value in child_one],
+            "child_two": [str(value) for value in child_two],
+            "parent_gap": str(parent_gap),
+            "child_one_gap": str(child_gap),
+            "pool_shift_max": str(pool_shift),
+            "parent_reconstruction_error": str(reconstruction_error),
+            "power_pool_error": str(power_pool_error),
+            "passed": passed,
+        }

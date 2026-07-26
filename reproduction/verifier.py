@@ -11,6 +11,7 @@ from .independent_checker import (
     claim3_decimal_witness,
     claim4_decimal_counterexample,
     claim5_decimal_geometry,
+    claim6_decimal_split,
 )
 from .math_core import (
     centered_log_profile,
@@ -583,15 +584,170 @@ def claim5() -> dict[str, Any]:
     }
 
 
-def claim6_toy() -> dict[str, Any]:
-    parents = [0.5, 1.0, 2.0, 5.0]
-    children = [0.15 * value for value in parents]
+def _power_distribution(distribution: list[float], exponent: float) -> list[float]:
+    return normalize([value**exponent for value in distribution])
+
+
+def _tilt_distribution(
+    distribution: list[float], tilt: list[float], scale: float
+) -> list[float]:
+    return normalize(
+        [
+            probability * math.exp(scale * value)
+            for probability, value in zip(distribution, tilt)
+        ]
+    )
+
+
+def claim6() -> dict[str, Any]:
+    parent = [0.6, 0.3, 0.1]
+    t = 1.5
+    peer = _power_distribution(parent, 2.0 * t - 1.0)
+    base_weights = [0.5, 0.5]
+    pool_before = log_pool([parent, peer], base_weights)
+    expected_power_pool = _power_distribution(parent, t)
+    parent_gap = welfare_gap(parent, pool_before)
+    alpha = 0.4
+    split_parent_weight = base_weights[0]
+    global_split_weights = [
+        alpha * split_parent_weight,
+        (1.0 - alpha) * split_parent_weight,
+        base_weights[1],
+    ]
+    lambdas = [0.0, 1.0, 2.0, 4.0, 8.0, 12.0]
+    sweep: list[dict[str, Any]] = []
+    for lam in lambdas:
+        tilt = [-lam, 0.0, 0.0]
+        child_one = _tilt_distribution(parent, tilt, 1.0 - alpha)
+        child_two = _tilt_distribution(parent, tilt, -alpha)
+        reconstructed_parent = log_pool(
+            [child_one, child_two], [alpha, 1.0 - alpha]
+        )
+        pool_after = log_pool(
+            [child_one, child_two, peer], global_split_weights
+        )
+        sweep.append(
+            {
+                "lambda": lam,
+                "child_one": child_one,
+                "child_two": child_two,
+                "child_one_gap": welfare_gap(child_one, pool_after),
+                "child_two_gap": welfare_gap(child_two, pool_after),
+                "parent_reconstruction_error": max(
+                    abs(left - right)
+                    for left, right in zip(parent, reconstructed_parent)
+                ),
+                "global_pool_shift": max(
+                    abs(left - right)
+                    for left, right in zip(pool_before, pool_after)
+                ),
+            }
+        )
+
+    # Clone control: at lambda=0 both children equal the parent and inherit its
+    # positive gap. Polarization, not splitting syntax alone, creates harm.
+    clone_control = sweep[0]
+
+    # Incompatible control: tilt only child one and leave child two unchanged.
+    # It no longer reconstructs P1, so the global pool must move.
+    incompatible_lambda = 8.0
+    incompatible_child_one = _tilt_distribution(
+        parent, [-incompatible_lambda, 0.0, 0.0], 1.0 - alpha
+    )
+    incompatible_parent = log_pool(
+        [incompatible_child_one, parent], [alpha, 1.0 - alpha]
+    )
+    incompatible_pool = log_pool(
+        [incompatible_child_one, parent, peer], global_split_weights
+    )
+    incompatible_reconstruction_error = max(
+        abs(left - right)
+        for left, right in zip(parent, incompatible_parent)
+    )
+    incompatible_pool_shift = max(
+        abs(left - right)
+        for left, right in zip(pool_before, incompatible_pool)
+    )
+    independent = claim6_decimal_split()
+    negative_rows = [row for row in sweep if float(row["child_one_gap"]) < 0.0]
+    passed = (
+        max(
+            abs(left - right)
+            for left, right in zip(pool_before, expected_power_pool)
+        )
+        < 1e-12
+        and parent_gap > 1e-12
+        and bool(negative_rows)
+        and all(float(row["parent_reconstruction_error"]) < 1e-12 for row in sweep)
+        and all(float(row["global_pool_shift"]) < 1e-12 for row in sweep)
+        and float(clone_control["child_one_gap"]) > 0.0
+        and float(clone_control["child_two_gap"]) > 0.0
+        and incompatible_reconstruction_error > 1e-4
+        and incompatible_pool_shift > 1e-4
+        and independent["passed"]
+    )
     return {
-        "status": "TOY",
-        "passed": all(child < parent for parent, child in zip(parents, children)),
-        "parent_values": parents,
-        "child_values": children,
-        "limitation": "The dilution proxy is not a compatible logarithmic split and cannot verify theorem 14.",
+        "status": "VERIFIED" if passed else "BLOCKED",
+        "passed": passed,
+        "contract": {
+            "parent": "nonuniform full-support P1",
+            "peer": "P2 proportional to P1^(2t-1), t>1",
+            "pool": "Pt proportional to P1^t",
+            "split": (
+                "log P11=log P1+(1-alpha)g-c1; "
+                "log P12=log P1-alpha*g-c2"
+            ),
+            "weights": "beta11=alpha*beta1; beta12=(1-alpha)*beta1",
+            "conclusion": "Delta_P1(Pt)>0 but Delta_P11(Pt)<0 for a compatible split",
+        },
+        "base": {
+            "parent": parent,
+            "peer": peer,
+            "weights": base_weights,
+            "t": t,
+            "pool": pool_before,
+            "power_pool_error": max(
+                abs(left - right)
+                for left, right in zip(pool_before, expected_power_pool)
+            ),
+            "parent_gap": parent_gap,
+        },
+        "split": {
+            "alpha": alpha,
+            "global_weights": global_split_weights,
+            "depressed_outcome": 0,
+            "sweep": sweep,
+            "first_negative_lambda": negative_rows[0]["lambda"] if negative_rows else None,
+            "asymptotic_certificate": (
+                "P11_lambda(o*) -> 0 while Pt(o*)>0, hence "
+                "KL(Pt||P11_lambda)->infinity; child entropy stays <=log|O|, "
+                "so Delta_P11(Pt)->-infinity"
+            ),
+        },
+        "independent_checker": independent,
+        "negative_controls": {
+            "clone": {
+                "lambda": 0.0,
+                "child_one_gap": clone_control["child_one_gap"],
+                "child_two_gap": clone_control["child_two_gap"],
+                "detected": (
+                    float(clone_control["child_one_gap"]) > 0.0
+                    and float(clone_control["child_two_gap"]) > 0.0
+                ),
+            },
+            "incompatible_one_sided_tilt": {
+                "parent_reconstruction_error": incompatible_reconstruction_error,
+                "global_pool_shift": incompatible_pool_shift,
+                "detected": (
+                    incompatible_reconstruction_error > 1e-4
+                    and incompatible_pool_shift > 1e-4
+                ),
+            },
+        },
+        "limitation": (
+            "This is a finite-alphabet existential counterexample exactly of "
+            "the theorem's compatible-split form; it does not assert that every split harms a child."
+        ),
     }
 
 
@@ -603,10 +759,10 @@ def run_all() -> dict[str, Any]:
         "claim_3": claim3(rng),
         "claim_4": claim4(),
         "claim_5": claim5(),
-        "claim_6": claim6_toy(),
+        "claim_6": claim6(),
     }
     return {
-        "campaign_stage": "claim_5_first_order_shattering",
+        "campaign_stage": "claim_6_compatible_recursive_split",
         "seed": SEED,
         "claims": claims,
         "full_credit_claims": sum(item["status"] in {"VERIFIED", "FALSIFIED"} for item in claims.values()),

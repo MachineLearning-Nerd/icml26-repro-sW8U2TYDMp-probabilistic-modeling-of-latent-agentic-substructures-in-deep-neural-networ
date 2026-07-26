@@ -1,0 +1,9 @@
+{
+  "claim": 6,
+  "paper_anchor": "Section 4.1, Lemma 13 and Theorem 14; Appendix G, Lemma 44 and Theorem 46",
+  "quantifier": "there exist agents, weights, and a compatible split",
+  "precondition": "the parent P1 has a strictly positive welfare gap in the original log pool",
+  "compatibility": "the weighted child log pool reconstructs P1 and global child weights sum to beta1",
+  "conclusion": "the global pool is unchanged but at least one child has a strictly negative welfare gap",
+  "verdict_if_passed": "VERIFIED"
+}
