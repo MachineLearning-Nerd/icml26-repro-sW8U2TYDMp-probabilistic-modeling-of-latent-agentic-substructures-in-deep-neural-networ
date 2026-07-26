@@ -16,6 +16,7 @@ from .math_core import (
     centered_log_profile,
     entropy,
     epistemic_utility,
+    expectation,
     kl_divergence,
     linear_pool,
     log_pool,
