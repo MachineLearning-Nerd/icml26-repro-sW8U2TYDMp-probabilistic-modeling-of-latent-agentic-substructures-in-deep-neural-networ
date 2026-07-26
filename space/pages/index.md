@@ -55,5 +55,6 @@ checker, or negative control fails.
 - [Historical rejected baseline](#/verification-run) — preserved for audit,
   clearly superseded by the current pages above.
 
-The exact judged files also remain unchanged under
-`historical/judged-3d065680/`.
+All 17 judged paths remain present. Exact judged text/SVG copies are preserved
+under `historical/judged-3d065680/`; the three binary PNG assets remain
+hash-identical at their original root paths because publication is text-only.

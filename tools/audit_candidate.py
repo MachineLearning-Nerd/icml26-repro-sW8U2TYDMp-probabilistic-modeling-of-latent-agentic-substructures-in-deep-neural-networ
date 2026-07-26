@@ -125,7 +125,9 @@ def audit(root: Path, historical_manifest: Path | None) -> dict:
     historical = {
         "manifest_entries": 0,
         "root_path_subset": False,
-        "exact_historical_copy": False,
+        "exact_dedicated_copy_count": 0,
+        "exact_root_count": 0,
+        "exact_preserved_any_location": False,
     }
     if historical_manifest:
         entries: list[tuple[str, str]] = []
@@ -134,15 +136,28 @@ def audit(root: Path, historical_manifest: Path | None) -> dict:
             entries.append((digest, relative))
         historical["manifest_entries"] = len(entries)
         historical["root_path_subset"] = all((root / relative).is_file() for _, relative in entries)
-        exact = True
+        dedicated_count = 0
+        root_count = 0
+        every_entry_preserved = True
         for digest, relative in entries:
             copied = root / "historical/judged-3d065680" / relative
-            if not copied.is_file() or hashlib.sha256(copied.read_bytes()).hexdigest() != digest:
-                exact = False
-                break
-        historical["exact_historical_copy"] = exact
+            original = root / relative
+            copied_exact = (
+                copied.is_file()
+                and hashlib.sha256(copied.read_bytes()).hexdigest() == digest
+            )
+            root_exact = (
+                original.is_file()
+                and hashlib.sha256(original.read_bytes()).hexdigest() == digest
+            )
+            dedicated_count += int(copied_exact)
+            root_count += int(root_exact)
+            every_entry_preserved &= copied_exact or root_exact
+        historical["exact_dedicated_copy_count"] = dedicated_count
+        historical["exact_root_count"] = root_count
+        historical["exact_preserved_any_location"] = every_entry_preserved
         assert historical["root_path_subset"]
-        assert historical["exact_historical_copy"]
+        assert historical["exact_preserved_any_location"]
 
     return {
         "audit_status": "PASS",

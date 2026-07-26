@@ -26,9 +26,11 @@ Start at the [canonical logbook](./index.html), then use the
 and the [illustrated report](./report/report.md). The current executable code
 is under `reproduction/`; raw JSON and controls are under `evidence/`.
 
-The exact judged revision is preserved beneath
-`historical/judged-3d065680/`. The old combined verification is labeled
-**Historical rejected baseline** and is not the current verifier.
+All 17 judged paths remain at their original locations. Exact judged text/SVG
+copies are also preserved beneath `historical/judged-3d065680/`; the three
+binary PNG assets remain hash-identical at their original root paths because
+the release is intentionally text-only. The old combined verification is
+labeled **Historical rejected baseline** and is not the current verifier.
 
 ## Historical Space description
 

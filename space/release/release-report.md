@@ -35,9 +35,10 @@ uv sync --locked --no-dev && .venv/bin/python -m reproduction.run_all
 
 Blind round 1 identified four visibility gaps. [Round 1](red-team-round1.md)
 records them. [Round 2](red-team-round2.md) opened 83 canonical-reachable
-files and passed with none missing. All 17 judged paths remain present; all 17
-exact judged hashes match the protected historical copy. Secret scanning found
-no credential-like paths.
+files and passed with none missing. All 17 judged paths remain present. Exact
+text/SVG copies are in the protected historical subtree; the three judged PNGs
+remain hash-identical at their root paths because publication is text-only.
+Secret scanning found no credential-like paths.
 
 The exact [text upload allowlist](upload-allowlist.txt) contains 112 UTF-8
 paths. The [SHA-256 manifest](upload-manifest.sha256) covers the other 111

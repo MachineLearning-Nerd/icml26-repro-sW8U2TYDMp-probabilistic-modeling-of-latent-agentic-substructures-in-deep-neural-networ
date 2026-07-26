@@ -68,8 +68,9 @@ cost: **$0**.
 - Blind round 1 recorded four inaccessible items; all were fixed.
 - Blind round 2 opened 83 reachable files and passed with no unverifiable
   conclusion.
-- All 17 judged paths remain present. All 17 exact judged hashes also match the
-  protected copy beneath `historical/judged-3d065680/`.
+- All 17 judged paths remain present. Exact text/SVG copies are preserved
+  beneath `historical/judged-3d065680/`; the three judged PNGs remain
+  hash-identical at their original root paths because publication is text-only.
 - Secret scanning reports zero credential-like paths.
 - The exact [text upload allowlist](../../space/release/upload-allowlist.txt)
   contains 112 UTF-8 paths. The
