@@ -88,3 +88,58 @@ def claim2_decimal_certificate() -> dict[str, Any]:
             "tolerance": str(tolerance),
             "passed": passed,
         }
+
+
+def claim3_decimal_witness() -> dict[str, Any]:
+    """Independently check the paper's n=2, three-outcome construction."""
+    with localcontext() as context:
+        context.prec = 70
+        epsilon = Decimal("0.00001")
+        delta = epsilon**3
+        base = Decimal(1) - epsilon - delta
+        agents = [
+            [base, epsilon, delta],
+            [base, delta, epsilon],
+        ]
+        raw_pool = [
+            (agents[0][outcome] * agents[1][outcome]).sqrt()
+            for outcome in range(3)
+        ]
+        normalizer = sum(raw_pool, Decimal(0))
+        pool = [value / normalizer for value in raw_pool]
+        gaps = [
+            sum(
+                (
+                    (pool[outcome] - agent[outcome]) * agent[outcome].ln()
+                    for outcome in range(3)
+                ),
+                Decimal(0),
+            )
+            for agent in agents
+        ]
+        # Linear pooling is the named wrong-pool mutation.
+        linear_pool = [
+            (agents[0][outcome] + agents[1][outcome]) / Decimal(2)
+            for outcome in range(3)
+        ]
+        linear_gaps = [
+            sum(
+                (
+                    (linear_pool[outcome] - agent[outcome]) * agent[outcome].ln()
+                    for outcome in range(3)
+                ),
+                Decimal(0),
+            )
+            for agent in agents
+        ]
+        passed = min(gaps) > 0 and min(linear_gaps) < 0
+        return {
+            "checker": "independent Decimal construction, precision=70",
+            "epsilon": str(epsilon),
+            "delta": str(delta),
+            "agents": [[str(value) for value in agent] for agent in agents],
+            "log_pool": [str(value) for value in pool],
+            "log_pool_gaps": [str(value) for value in gaps],
+            "wrong_linear_pool_gaps": [str(value) for value in linear_gaps],
+            "passed": passed,
+        }

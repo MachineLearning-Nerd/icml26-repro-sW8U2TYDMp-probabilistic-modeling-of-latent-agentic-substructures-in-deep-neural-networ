@@ -1,0 +1,11 @@
+{
+  "claim": 3,
+  "paper_anchor": "Section 3.1, Theorems 8-9; Appendix E.2, Theorems 34-36",
+  "domain": "n >= 2 full-support beliefs on at least three outcomes",
+  "pool": "normalized weighted geometric mean",
+  "weights": "positive normalized weights with max_i beta_i < 1",
+  "quantifier": "there exist beliefs such that every welfare gap is strictly positive",
+  "construction": "shared base outcome plus one private outcome per agent, epsilon and delta=epsilon^(n+1)",
+  "contrast": "strict unanimity is impossible on a binary outcome space",
+  "verdict_if_passed": "VERIFIED"
+}

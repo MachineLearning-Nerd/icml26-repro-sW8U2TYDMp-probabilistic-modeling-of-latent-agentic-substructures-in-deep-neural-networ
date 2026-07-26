@@ -6,7 +6,10 @@ import math
 import random
 from typing import Any
 
-from .independent_checker import claim2_decimal_certificate
+from .independent_checker import (
+    claim2_decimal_certificate,
+    claim3_decimal_witness,
+)
 from .math_core import (
     entropy,
     epistemic_utility,
@@ -184,20 +187,117 @@ def claim2(rng: random.Random) -> dict[str, Any]:
     }
 
 
-def claim3_toy(rng: random.Random) -> dict[str, Any]:
-    witness = None
-    for trial in range(20_000):
-        agents = [_random_distribution(rng, 3) for _ in range(2)]
-        pool = log_pool(agents, [0.5, 0.5])
+def _theorem9_construction(n: int, epsilon: float) -> list[list[float]]:
+    """Appendix E.2.1 construction on shared o_0 and private o_i."""
+    if n < 2 or not 0.0 < epsilon < 0.25:
+        raise ValueError("construction requires n>=2 and 0<epsilon<1/4")
+    delta = epsilon ** (n + 1)
+    base = 1.0 - epsilon - (n - 1) * delta
+    agents: list[list[float]] = []
+    for agent_index in range(n):
+        distribution = [base, *([delta] * n)]
+        distribution[agent_index + 1] = epsilon
+        agents.append(distribution)
+    return agents
+
+
+def claim3(rng: random.Random) -> dict[str, Any]:
+    del rng
+    epsilon = 1e-5
+    weight_sets = (
+        [0.5, 0.5],
+        [0.2, 0.8],
+        [0.1, 0.3, 0.6],
+        [0.05, 0.15, 0.3, 0.5],
+    )
+    fixtures: list[dict[str, Any]] = []
+    for weights in weight_sets:
+        agents = _theorem9_construction(len(weights), epsilon)
+        pool = log_pool(agents, weights)
         gaps = [welfare_gap(agent, pool) for agent in agents]
-        if min(gaps) > 1e-8:
-            witness = {"trial": trial, "agents": agents, "pool": pool, "gaps": gaps}
-            break
+        fixtures.append(
+            {
+                "n": len(weights),
+                "outcomes": len(weights) + 1,
+                "epsilon": epsilon,
+                "delta": epsilon ** (len(weights) + 1),
+                "weights": weights,
+                "agents": agents,
+                "pool": pool,
+                "gaps": gaps,
+                "minimum_gap": min(gaps),
+            }
+        )
+
+    # Complete grid corroboration of the binary contrast. The proof certificate
+    # below, rather than this grid, supplies the universal argument.
+    binary_grid = [value / 100 for value in range(1, 100)]
+    binary_strict_cases = 0
+    for left_index, left_probability in enumerate(binary_grid):
+        for right_probability in binary_grid[left_index + 1 :]:
+            agents = [
+                [left_probability, 1.0 - left_probability],
+                [right_probability, 1.0 - right_probability],
+            ]
+            for left_weight in (0.1, 0.25, 0.5, 0.75, 0.9):
+                pool = log_pool(agents, [left_weight, 1.0 - left_weight])
+                binary_strict_cases += int(
+                    min(welfare_gap(agent, pool) for agent in agents) > 1e-14
+                )
+
+    independent = claim3_decimal_witness()
+    wrong_pool_detected = all(
+        min(
+            welfare_gap(agent, linear_pool(item["agents"], item["weights"]))
+            for agent in item["agents"]
+        )
+        < 0.0
+        for item in fixtures
+    )
+    passed = (
+        all(float(item["minimum_gap"]) > 1e-10 for item in fixtures)
+        and binary_strict_cases == 0
+        and independent["passed"]
+        and wrong_pool_detected
+    )
     return {
-        "status": "TOY",
-        "passed": witness is not None,
-        "witness": witness,
-        "limitation": "One sampled witness is scoped evidence; it does not audit the theorem construction or binary contrast.",
+        "status": "VERIFIED" if passed else "BLOCKED",
+        "passed": passed,
+        "contract": {
+            "domain": "n>=2 full-support beliefs; at least three outcomes",
+            "pool": "normalized weighted geometric mean",
+            "weights": "positive normalized; max_i beta_i<1",
+            "quantifier": "there exist beliefs yielding Delta_i>0 for every agent",
+        },
+        "construction": (
+            "on {o_0,...,o_n}: P_i(o_i)=epsilon, "
+            "P_i(o_0)=1-epsilon-(n-1)epsilon^(n+1), "
+            "and P_i(other)=epsilon^(n+1)"
+        ),
+        "asymptotic_certificate": {
+            "private_pool_exponent": "c_i=(n+1)-n*beta_i>1",
+            "agent_entropy": "H(P_i)=Theta(epsilon*log(1/epsilon))",
+            "pool_entropy": "H(P)=o(epsilon*log(1/epsilon))",
+            "reverse_kl": "KL(P||P_i)=O(epsilon)",
+            "conclusion": "Delta_i/(epsilon*log(1/epsilon)) -> 1",
+        },
+        "fixtures": fixtures,
+        "independent_checker": independent,
+        "negative_controls": {
+            "binary_grid_cases": 99 * 98 // 2 * 5,
+            "binary_strict_unanimity_cases": binary_strict_cases,
+            "binary_analytic_reason": (
+                "Delta_i=(q-p_i)logit(p_i), while logit(q) is a "
+                "positive-weight average of the agents' logits; an extreme "
+                "same-side agent or either agent in a mixed-side pair cannot benefit"
+            ),
+            "wrong_linear_pool_detected": wrong_pool_detected,
+        },
+        "limitation": (
+            "Finite fixtures audit the construction; the existence conclusion "
+            "uses the displayed asymptotic certificate. The construction uses "
+            "n+1 outcomes; the n=2 fixture directly establishes the three-outcome frontier."
+        ),
     }
 
 
@@ -243,13 +343,13 @@ def run_all() -> dict[str, Any]:
     claims = {
         "claim_1": claim1(),
         "claim_2": claim2(rng),
-        "claim_3": claim3_toy(rng),
+        "claim_3": claim3(rng),
         "claim_4": claim4_toy(),
         "claim_5": claim5_toy(),
         "claim_6": claim6_toy(),
     }
     return {
-        "campaign_stage": "claim_2_analytic_certificate",
+        "campaign_stage": "claim_3_constructive_log_pooling",
         "seed": SEED,
         "claims": claims,
         "full_credit_claims": sum(item["status"] in {"VERIFIED", "FALSIFIED"} for item in claims.values()),

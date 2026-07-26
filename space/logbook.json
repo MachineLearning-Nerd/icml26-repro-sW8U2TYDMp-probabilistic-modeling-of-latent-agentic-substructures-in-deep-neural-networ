@@ -27,6 +27,12 @@
         "children": []
       },
       {
+        "slug": "current-claim-3",
+        "title": "Current verification: Claim 3",
+        "file": "pages/current-claim-3/page.md",
+        "children": []
+      },
+      {
         "slug": "overview",
         "title": "Overview",
         "file": "pages/overview/page.md",
