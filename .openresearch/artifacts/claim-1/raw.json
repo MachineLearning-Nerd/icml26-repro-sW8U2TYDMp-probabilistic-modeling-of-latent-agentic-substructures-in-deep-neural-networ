@@ -1,0 +1,8 @@
+{
+  "evidence_origin": "immutable judged Space revision 3d065680c4492fdfc5e339a95f8287af6a533ec7",
+  "distribution": [0.3, 0.5, 0.2],
+  "reported_expected_utility": -1.0297,
+  "reported_identity": "E_P[log P] = -H(P)",
+  "judge_verdict": "verified",
+  "note": "This historical raw record is rerun by the baseline experiment before it is accepted cumulatively."
+}
