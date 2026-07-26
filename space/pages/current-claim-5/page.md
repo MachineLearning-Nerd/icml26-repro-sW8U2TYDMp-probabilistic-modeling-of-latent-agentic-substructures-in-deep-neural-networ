@@ -67,4 +67,22 @@ difference printed in Appendix Theorem 75 is not used as a general identity
 when the baseline projection is nonzero; the strict result follows directly
 from the preceding Pythagorean identity.
 
-Exact supervised output and raw JSON will be attached before release.
+## Supervised cumulative evidence
+
+At budget `0.2`, pure benevolence achieved first-order reduction `0.05`,
+whereas the elicited span achieved `0.08660254037844387`, a strict gain of
+`0.03660254037844386`. The Pythagorean residual was `0.0`. Finite exponential
+tilt ratios approached the first-order result:
+`0.941464, 0.970894, 0.988411, 0.994216`. The independent 70-digit checker
+reproduced the strict gain. Both the inside-span and event-orthogonal controls
+reduced it to exactly zero.
+
+The cumulative run used Git SHA
+`c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4`, seed `42`, one local CPU
+thread, `0.2946048330049962` verifier seconds, 5 orchestrated seconds, and
+`$0`. Download [raw output](../../evidence/claim-5/raw.json),
+[checker](../../evidence/claim-5/checker.json),
+[controls](../../evidence/claim-5/negative_control.json),
+[contract](../../evidence/claim-5/claim_contract.json),
+[environment](../../evidence/claim-5/environment.md), and
+[limitations](../../evidence/claim-5/limitations.md).

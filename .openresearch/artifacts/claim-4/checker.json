@@ -1,0 +1,8 @@
+{
+  "checker": "independent Decimal log-pool audit, precision=70",
+  "pool_shift_max": "0E-70",
+  "waluigi_weight_change": "0",
+  "theorem_lhs": "0E-70",
+  "theorem_rhs": "0E-71",
+  "passed": true
+}

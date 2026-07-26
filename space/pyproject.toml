@@ -1,0 +1,14 @@
+[project]
+name = "latent-agentic-substructures-reproduction"
+version = "0.1.0"
+description = "Claim-level reproduction for arXiv:2509.06701"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "marimo==0.23.15",
+]
+
+[tool.uv]
+package = false

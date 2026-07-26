@@ -1,0 +1,15 @@
+{
+  "claim": 2,
+  "paper_anchor": "Section 3.1, Theorem 10; Appendix C.3, Theorem 37",
+  "domain": {
+    "agents": "n >= 2 full-support probability distributions on one finite outcome space",
+    "weights": "beta_i > 0 and sum_i beta_i = 1",
+    "nondegeneracy": "not all agent distributions are identical",
+    "pool": "P = sum_i beta_i P_i",
+    "utility": "W_i(o) = log P_i(o)"
+  },
+  "quantifier": "for every admissible instance",
+  "conclusion": "It is impossible that every Delta_i >= 0; therefore all agents cannot strictly benefit.",
+  "certificate": "sum_i beta_i Delta_i = -sum_i beta_i [KL(P_i||P) + KL(P||P_i)] < 0",
+  "verdict_if_passed": "VERIFIED"
+}

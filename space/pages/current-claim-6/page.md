@@ -55,6 +55,26 @@ pool invariance. The clone control at `lambda=0` must keep both child gaps
 positive. A one-sided tilt is deliberately incompatible and must move both
 the reconstructed parent and global pool.
 
+## Supervised cumulative evidence
+
+The parent gap was `0.1289745781560655`. Child-one gaps over
+`lambda={0,1,2,4,8,12}` were
+`{0.128975, 0.121525, -0.062208, -0.807044, -2.620105, -4.348108}`: the
+first negative appeared at `lambda=2`. Maximum parent-reconstruction error
+was `1.1102230246251565e-16`; maximum global-pool shift was
+`5.551115123125783e-17`. The independent 70-digit checker found both
+invariants within `2E-70`. The clone stayed positive and the incompatible
+one-sided tilt moved the parent (`0.4197323`) and pool (`0.2274891`).
+
+The cumulative run used Git SHA
+`c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4`, seed `42`, one local CPU
+thread, `0.2946048330049962` verifier seconds, 5 orchestrated seconds, and
+`$0`. Download [raw output](../../evidence/claim-6/raw.json),
+[checker](../../evidence/claim-6/checker.json),
+[controls](../../evidence/claim-6/negative_control.json),
+[contract](../../evidence/claim-6/claim_contract.json),
+[environment](../../evidence/claim-6/environment.md), and
+[limitations](../../evidence/claim-6/limitations.md).
+
 This verifies an existential compatible-split counterexample. It does not
-assert that every recursive split harms a child. Exact supervised output and
-raw JSON will be attached before release.
+assert that every recursive split harms a child.

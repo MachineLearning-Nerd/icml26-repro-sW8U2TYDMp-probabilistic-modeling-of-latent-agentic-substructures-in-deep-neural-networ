@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+  <title id="title">Claim-level reproduction headline</title>
+  <desc id="desc">Five claims verified and the broad fourth claim falsified with exact evidence.</desc>
+  <rect width="1000" height="500" rx="28" fill="#0b1220"/>
+  <text x="60" y="70" fill="#e5e7eb" font-family="system-ui,sans-serif" font-size="28" font-weight="700">FROM HIDDEN TO AUDITABLE</text>
+  <text x="60" y="112" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="20">Six claim contracts · visible code · independent checkers · negative controls</text>
+  <g font-family="system-ui,sans-serif" text-anchor="middle">
+    <g transform="translate(70 160)">
+      <rect width="130" height="170" rx="18" fill="#12372a" stroke="#34d399" stroke-width="2"/>
+      <text x="65" y="52" fill="#a7f3d0" font-size="18">CLAIM 1</text><text x="65" y="102" fill="#fff" font-size="22" font-weight="700">VERIFIED</text><text x="65" y="140" fill="#6ee7b7" font-size="16">error 0</text>
+    </g>
+    <g transform="translate(215 160)">
+      <rect width="130" height="170" rx="18" fill="#12372a" stroke="#34d399" stroke-width="2"/>
+      <text x="65" y="52" fill="#a7f3d0" font-size="18">CLAIM 2</text><text x="65" y="102" fill="#fff" font-size="22" font-weight="700">VERIFIED</text><text x="65" y="140" fill="#6ee7b7" font-size="16">1E−70</text>
+    </g>
+    <g transform="translate(360 160)">
+      <rect width="130" height="170" rx="18" fill="#12372a" stroke="#34d399" stroke-width="2"/>
+      <text x="65" y="52" fill="#a7f3d0" font-size="18">CLAIM 3</text><text x="65" y="102" fill="#fff" font-size="22" font-weight="700">VERIFIED</text><text x="65" y="140" fill="#6ee7b7" font-size="16">all gaps &gt; 0</text>
+    </g>
+    <g transform="translate(505 160)">
+      <rect width="130" height="170" rx="18" fill="#3a2225" stroke="#fb7185" stroke-width="2"/>
+      <text x="65" y="52" fill="#fecdd3" font-size="18">CLAIM 4</text><text x="65" y="102" fill="#fff" font-size="22" font-weight="700">FALSIFIED</text><text x="65" y="140" fill="#fda4af" font-size="16">ΔW = 0</text>
+    </g>
+    <g transform="translate(650 160)">
+      <rect width="130" height="170" rx="18" fill="#12372a" stroke="#34d399" stroke-width="2"/>
+      <text x="65" y="52" fill="#a7f3d0" font-size="18">CLAIM 5</text><text x="65" y="102" fill="#fff" font-size="22" font-weight="700">VERIFIED</text><text x="65" y="140" fill="#6ee7b7" font-size="16">+0.03660</text>
+    </g>
+    <g transform="translate(795 160)">
+      <rect width="130" height="170" rx="18" fill="#12372a" stroke="#34d399" stroke-width="2"/>
+      <text x="65" y="52" fill="#a7f3d0" font-size="18">CLAIM 6</text><text x="65" y="102" fill="#fff" font-size="22" font-weight="700">VERIFIED</text><text x="65" y="140" fill="#6ee7b7" font-size="16">child −2.62</text>
+    </g>
+  </g>
+  <line x1="70" y1="390" x2="930" y2="390" stroke="#334155"/>
+  <text x="70" y="430" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="18">Observed on 1 local CPU thread · verifier 0.295 s · deterministic seed 42</text>
+  <text x="70" y="462" fill="#64748b" font-family="system-ui,sans-serif" font-size="15">Scientific statuses shown here are evidence assessments, not a new live judge score.</text>
+</svg>

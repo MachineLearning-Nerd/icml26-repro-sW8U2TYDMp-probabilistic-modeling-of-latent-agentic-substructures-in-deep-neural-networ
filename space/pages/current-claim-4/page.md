@@ -59,8 +59,25 @@ uv sync --locked --no-dev && .venv/bin/python -m reproduction.run_all
 
 The process exits nonzero unless the counterexample satisfies every listed
 assumption, the exact inequality passes, the broad conclusion is contradicted,
-and the mutated inequality is rejected. Raw supervised output will be linked
-before release.
+and the mutated inequality is rejected.
+
+## Supervised cumulative evidence
+
+The measured pool shift was exactly `0.0`, Waluigi's weight change was `0.0`,
+and the theorem's left and right sides were both `0.0`. The independent
+70-digit checker obtained pool shift `0E-70` and theorem residual at Decimal
+zero. Omitting the aligned-downweight term produced the false lower bound
+`0.033333333333333326 > 0`, so the mutation was detected.
+
+The cumulative run used Git SHA
+`c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4`, seed `42`, one local CPU
+thread, `0.2946048330049962` verifier seconds, 5 orchestrated seconds, and
+`$0`. Download [raw counterexample](../../evidence/claim-4/raw.json),
+[independent checker](../../evidence/claim-4/checker.json),
+[negative control](../../evidence/claim-4/negative_control.json),
+[contract](../../evidence/claim-4/claim_contract.json),
+[environment](../../evidence/claim-4/environment.md), and
+[limitations](../../evidence/claim-4/limitations.md).
 
 This falsifies the broad judged wording, not Theorem 19's conditional
 compensation inequality.

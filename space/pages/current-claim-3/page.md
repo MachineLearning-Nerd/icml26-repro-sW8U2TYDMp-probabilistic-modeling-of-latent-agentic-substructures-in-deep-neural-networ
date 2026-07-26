@@ -57,4 +57,28 @@ the agents' logits, an extreme same-side agent cannot improve, while
 mixed-side requirements are incompatible. A complete 0.01-grid check is
 printed only as checker calibration.
 
-Exact supervised output and raw JSON will be attached before release.
+## Supervised cumulative evidence
+
+With the predeclared `epsilon=1e-5`, the minimum strict gaps were:
+
+| Agents / weights | Minimum gap |
+|---|---:|
+| 2 / `(0.5,0.5)` | `0.00011512454946950386` |
+| 2 / `(0.2,0.8)` | `0.00011167524269923514` |
+| 3 / `(0.1,0.3,0.6)` | `0.0001151286941131128` |
+| 4 / `(0.05,0.15,0.3,0.5)` | `0.00011512915459163134` |
+
+The independent 70-digit checker reproduced both two-agent gaps as
+`0.0001151245494695038378…`. The wrong linear pool made both gaps negative
+(`-0.0001151292546381893587…`), and the complete binary calibration grid had
+0 strict cases among 24,255.
+
+The cumulative run used Git SHA
+`c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4`, seed `42`, one local CPU
+thread, `0.2946048330049962` verifier seconds, 5 orchestrated seconds, and
+`$0`. Download [raw output](../../evidence/claim-3/raw.json),
+[checker](../../evidence/claim-3/checker.json),
+[controls](../../evidence/claim-3/negative_control.json),
+[contract](../../evidence/claim-3/claim_contract.json),
+[environment](../../evidence/claim-3/environment.md), and
+[limitations](../../evidence/claim-3/limitations.md).

@@ -1,0 +1,10 @@
+{
+  "claim_id": 1,
+  "paper_source_sha256": "013a579947622a09d4375d4d4d4cb18aa8c61728ed3070c83f084c40140f0282",
+  "source_anchor": "Section 2, Definitions 1-3",
+  "domain": "finite strictly positive probability distribution P on O",
+  "quantifier": "for every outcome o in O",
+  "statement": "U(o) = log(P(o)) and E_P[U] = -H(P)",
+  "verdict_rule": "VERIFIED iff both identities hold within 1e-12 and the probability-for-log mutation is detected",
+  "seed": 42
+}

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+  <title id="title">Log-pool witness and wrong-pool control</title>
+  <desc id="desc">Log pooling gives both agents positive welfare gaps while linear pooling gives both negative gaps.</desc>
+  <rect width="1000" height="500" rx="24" fill="#f8fafc"/>
+  <text x="60" y="62" fill="#0f172a" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Claim 3 · the three-outcome construction changes the sign</text>
+  <text x="60" y="98" fill="#475569" font-family="system-ui,sans-serif" font-size="17">n=2, ε=10⁻⁵, equal weights; predeclared witness, no search</text>
+  <line x1="120" y1="315" x2="890" y2="315" stroke="#334155" stroke-width="2"/>
+  <line x1="120" y1="145" x2="120" y2="400" stroke="#94a3b8"/>
+  <g font-family="system-ui,sans-serif" text-anchor="middle">
+    <rect x="205" y="191" width="90" height="124" rx="8" fill="#10b981"/><text x="250" y="181" fill="#047857" font-size="16">+1.15125e−4</text>
+    <rect x="315" y="191" width="90" height="124" rx="8" fill="#34d399"/><text x="360" y="181" fill="#047857" font-size="16">+1.15125e−4</text>
+    <text x="305" y="352" fill="#0f172a" font-size="18" font-weight="700">log pool</text>
+    <text x="250" y="382" fill="#475569" font-size="15">agent 1</text><text x="360" y="382" fill="#475569" font-size="15">agent 2</text>
+    <rect x="610" y="315" width="90" height="124" rx="8" fill="#fb7185"/><text x="655" y="465" fill="#be123c" font-size="16">−1.15129e−4</text>
+    <rect x="720" y="315" width="90" height="124" rx="8" fill="#fda4af"/><text x="765" y="465" fill="#be123c" font-size="16">−1.15129e−4</text>
+    <text x="710" y="352" fill="#0f172a" font-size="18" font-weight="700">linear control</text>
+  </g>
+  <text x="130" y="164" fill="#64748b" font-family="system-ui,sans-serif" font-size="14">welfare gap Δᵢ</text>
+</svg>

@@ -1,0 +1,27 @@
+{
+  "run_id": "685055a4-365c-4743-b4d5-41957d21bc9d",
+  "experiment": "Claim 6 compatible recursive split",
+  "git_sha": "c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4",
+  "command": "uv sync --locked --no-dev && .venv/bin/python -m reproduction.run_all",
+  "seed": 42,
+  "compute": {
+    "estimated_cores": 1,
+    "selected_backend": "local",
+    "selected_flavor": "local (HF cpu-upgrade not applicable)",
+    "actual_python_threads": 1,
+    "logical_cpus_visible": 8,
+    "verifier_runtime_seconds": 0.2946048330049962,
+    "orchestrated_duration_seconds": 5,
+    "cost_usd": 0.0
+  },
+  "claims": {
+    "1": "VERIFIED",
+    "2": "VERIFIED",
+    "3": "VERIFIED",
+    "4": "FALSIFIED",
+    "5": "VERIFIED",
+    "6": "VERIFIED"
+  },
+  "passed": true,
+  "toy_claims": 0
+}

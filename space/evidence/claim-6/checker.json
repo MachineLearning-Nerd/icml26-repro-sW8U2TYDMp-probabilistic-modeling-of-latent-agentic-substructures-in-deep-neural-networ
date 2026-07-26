@@ -1,0 +1,8 @@
+{
+  "checker": "independent Decimal compatible split, precision=70",
+  "parent_gap": "0.1289745781560656215240972794674283950654657211327680856025427213112591",
+  "child_one_gap_at_lambda_8": "-2.620104709949375615395556003080319254699886125962635336531068212516982",
+  "parent_reconstruction_error": "2E-70",
+  "pool_shift_max": "2E-70",
+  "passed": true
+}

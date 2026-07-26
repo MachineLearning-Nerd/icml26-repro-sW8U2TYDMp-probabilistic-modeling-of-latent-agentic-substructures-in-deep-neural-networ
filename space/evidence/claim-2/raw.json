@@ -1,0 +1,13 @@
+{
+  "run_id": "685055a4-365c-4743-b4d5-41957d21bc9d",
+  "git_sha": "c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4",
+  "identity": "sum_i beta_i Delta_i = -sum_i beta_i[KL(P_i||P)+KL(P||P_i)]",
+  "fixture_weighted_gaps": [
+    -0.31904253580352143,
+    -0.13718859347232618,
+    -0.15419397793318687,
+    -0.43184560618921686
+  ],
+  "maximum_certificate_error": 1.1102230246251565e-16,
+  "status": "VERIFIED"
+}

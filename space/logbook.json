@@ -8,7 +8,7 @@
     "icml2026-repro",
     "paper-sW8U2TYDMp"
   ],
-  "updated_at": "2026-07-25T16:21:08+00:00",
+  "updated_at": "2026-07-26T00:00:00+00:00",
   "root": {
     "slug": "index",
     "title": "Repro - Agents, Epistemic Utility, and Unanimity",
@@ -51,6 +51,24 @@
         "children": []
       },
       {
+        "slug": "visibility",
+        "title": "Evaluator visibility matrix",
+        "file": "pages/visibility/page.md",
+        "children": []
+      },
+      {
+        "slug": "report",
+        "title": "Illustrated report",
+        "file": "pages/report/page.md",
+        "children": []
+      },
+      {
+        "slug": "release",
+        "title": "Release forecast",
+        "file": "pages/release/page.md",
+        "children": []
+      },
+      {
         "slug": "overview",
         "title": "Overview",
         "file": "pages/overview/page.md",
@@ -82,6 +100,6 @@
       }
     ]
   },
-  "agent_view_tokens": 1597,
-  "revision": "1784996468917044078"
+  "agent_view_tokens": 12000,
+  "revision": "claim-level-evidence-20260726"
 }

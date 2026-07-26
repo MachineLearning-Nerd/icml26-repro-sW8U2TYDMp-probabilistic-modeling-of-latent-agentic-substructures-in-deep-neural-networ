@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+  <title id="title">Shattering span geometry</title>
+  <desc id="desc">The enlarged span provides greater first-order suppression and finite tilts converge to the prediction.</desc>
+  <rect width="1000" height="500" rx="24" fill="#f5f3ff"/>
+  <text x="55" y="62" fill="#2e1065" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Claim 5 · novelty aligned with the harmful event creates strict gain</text>
+  <text x="55" y="98" fill="#6d28d9" font-family="system-ui,sans-serif" font-size="17">Budget ε=0.2; exact weighted projection geometry</text>
+  <g font-family="system-ui,sans-serif" text-anchor="middle">
+    <line x1="105" y1="385" x2="485" y2="385" stroke="#6b7280"/>
+    <rect x="165" y="240" width="110" height="145" rx="9" fill="#a78bfa"/><text x="220" y="225" fill="#5b21b6" font-size="18">0.05000</text><text x="220" y="420" fill="#2e1065" font-size="17">pure H</text>
+    <rect x="325" y="134" width="110" height="251" rx="9" fill="#7c3aed"/><text x="380" y="119" fill="#5b21b6" font-size="18">0.08660</text><text x="380" y="420" fill="#2e1065" font-size="17">H + novel w</text>
+    <text x="295" y="465" fill="#6d28d9" font-size="18" font-weight="700">strict gain +0.03660</text>
+  </g>
+  <g transform="translate(560 135)" font-family="system-ui,sans-serif">
+    <text x="180" y="-18" fill="#2e1065" font-size="19" font-weight="700" text-anchor="middle">finite tilt / first-order ratio</text>
+    <line x1="20" y1="250" x2="360" y2="250" stroke="#6b7280"/><line x1="20" y1="20" x2="20" y2="250" stroke="#6b7280"/>
+    <line x1="20" y1="20" x2="360" y2="20" stroke="#c4b5fd" stroke-dasharray="6 5"/>
+    <polyline points="45,155 135,98 225,50 335,33" fill="none" stroke="#7c3aed" stroke-width="4"/>
+    <g fill="#7c3aed"><circle cx="45" cy="155" r="6"/><circle cx="135" cy="98" r="6"/><circle cx="225" cy="50" r="6"/><circle cx="335" cy="33" r="6"/></g>
+    <text x="45" y="285" fill="#4c1d95" font-size="14" text-anchor="middle">.10</text><text x="135" y="285" fill="#4c1d95" font-size="14" text-anchor="middle">.05</text><text x="225" y="285" fill="#4c1d95" font-size="14" text-anchor="middle">.02</text><text x="335" y="285" fill="#4c1d95" font-size="14" text-anchor="middle">.01 budget</text>
+    <text x="26" y="42" fill="#4c1d95" font-size="14">1.0</text><text x="26" y="170" fill="#4c1d95" font-size="14">.94</text>
+  </g>
+</svg>

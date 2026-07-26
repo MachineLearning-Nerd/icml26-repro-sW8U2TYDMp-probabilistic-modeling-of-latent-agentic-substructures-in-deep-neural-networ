@@ -1,0 +1,4 @@
+{
+  "mutation": "return P[o] instead of log(P[o])",
+  "detected": true
+}

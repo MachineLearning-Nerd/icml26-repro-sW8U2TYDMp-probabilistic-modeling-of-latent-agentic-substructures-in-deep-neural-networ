@@ -1,0 +1,8 @@
+{
+  "checker": "independent Decimal weighted geometry, precision=70",
+  "pure_max_reduction": "0.05000",
+  "shatter_max_reduction": "0.08660254037844386467637231707529361834714026269051903140279034897259666",
+  "strict_gain": "0.03660254037844386467637231707529361834714026269051903140279034897259666",
+  "pythagorean_residual": "0.000000",
+  "passed": true
+}

@@ -1,0 +1,16 @@
+{
+  "run_id": "685055a4-365c-4743-b4d5-41957d21bc9d",
+  "git_sha": "c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4",
+  "base_weights": [0.25, 0.25, 0.5],
+  "delta_weights": [0.05, -0.05, 0.0],
+  "inner_products_with_H": [
+    0.6666666666666665,
+    0.6666666666666665,
+    -0.6666666666666665
+  ],
+  "pool_shift_max": 0.0,
+  "waluigi_weight_change": 0.0,
+  "theorem_lhs": 0.0,
+  "theorem_rhs": 0.0,
+  "status": "FALSIFIED"
+}

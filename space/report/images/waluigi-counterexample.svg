@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+  <title id="title">Waluigi counterexample weight transfer</title>
+  <desc id="desc">Luigi gains weight from an aligned duplicate while Waluigi and the resulting pool remain unchanged.</desc>
+  <rect width="1000" height="500" rx="24" fill="#fff7ed"/>
+  <text x="55" y="62" fill="#431407" font-family="system-ui,sans-serif" font-size="28" font-weight="700">Claim 4 · “necessarily strengthens Waluigi” is too broad</text>
+  <text x="55" y="98" fill="#9a3412" font-family="system-ui,sans-serif" font-size="17">Stable transfer between duplicate aligned profiles leaves the antagonist and pool unchanged</text>
+  <g font-family="system-ui,sans-serif">
+    <text x="150" y="150" fill="#7c2d12" font-size="18" font-weight="700">BEFORE</text>
+    <text x="650" y="150" fill="#7c2d12" font-size="18" font-weight="700">AFTER</text>
+    <rect x="120" y="185" width="100" height="75" rx="8" fill="#4ade80"/><text x="150" y="230" fill="#052e16" font-size="18">H .25</text>
+    <rect x="220" y="185" width="100" height="75" rx="8" fill="#86efac"/><text x="245" y="230" fill="#052e16" font-size="18">A .25</text>
+    <rect x="320" y="185" width="200" height="75" rx="8" fill="#fb7185"/><text x="385" y="230" fill="#4c0519" font-size="18">W .50</text>
+    <rect x="620" y="185" width="120" height="75" rx="8" fill="#4ade80"/><text x="655" y="230" fill="#052e16" font-size="18">H .30</text>
+    <rect x="740" y="185" width="80" height="75" rx="8" fill="#86efac"/><text x="755" y="230" fill="#052e16" font-size="18">A .20</text>
+    <rect x="820" y="185" width="120" height="75" rx="8" fill="#fb7185"/><text x="845" y="230" fill="#4c0519" font-size="18">W .50</text>
+    <path d="M500 310 C540 360 575 360 615 310" fill="none" stroke="#ea580c" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="555" y="388" fill="#7c2d12" font-size="18" text-anchor="middle">H=A, so +.05H−.05A = 0</text>
+    <text x="500" y="440" fill="#431407" font-size="20" font-weight="700" text-anchor="middle">ΔW = 0 · max pool shift = 0 · theorem inequality holds at equality</text>
+  </g>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ea580c"/></marker></defs>
+</svg>

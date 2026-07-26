@@ -69,5 +69,21 @@ The process exits nonzero if either mutation is not detected.
 Floating-point fixtures cannot establish a universal theorem. Universal
 coverage here comes from the displayed symbolic derivation plus Gibbs'
 inequality; execution checks that the public implementation and arithmetic
-match that derivation. Exact run output, runtime, commit, and downloadable JSON
-will be added from the supervised cumulative run before release.
+match that derivation.
+
+## Supervised cumulative evidence
+
+At Git SHA `c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4`, the four fixture
+weighted gaps were `-0.3190425358`, `-0.1371885935`, `-0.1541939779`, and
+`-0.4318456062`; the maximum certificate residual was
+`1.1102230246251565e-16`. The independent 70-digit Decimal checker obtained a
+residual of `1E-70`. Both mutations were detected.
+
+The fixed command used seed `42`, one local CPU thread, `0.2946048330049962`
+seconds of verifier runtime, 5 seconds orchestrated runtime, and `$0` cost.
+Download [raw output](../../evidence/claim-2/raw.json),
+[independent checker](../../evidence/claim-2/checker.json),
+[negative controls](../../evidence/claim-2/negative_control.json),
+[contract](../../evidence/claim-2/claim_contract.json),
+[environment](../../evidence/claim-2/environment.md), and
+[full limitations](../../evidence/claim-2/limitations.md).

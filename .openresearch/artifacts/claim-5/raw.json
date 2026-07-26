@@ -1,0 +1,11 @@
+{
+  "run_id": "685055a4-365c-4743-b4d5-41957d21bc9d",
+  "git_sha": "c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4",
+  "budget": 0.2,
+  "pure_max_reduction": 0.05,
+  "shatter_max_reduction": 0.08660254037844387,
+  "strict_gain": 0.03660254037844386,
+  "pythagorean_error": 0.0,
+  "finite_tilt_ratios": [0.9414639819423049, 0.9708941678938102, 0.9884111004204961, 0.9942157059732883],
+  "status": "VERIFIED"
+}

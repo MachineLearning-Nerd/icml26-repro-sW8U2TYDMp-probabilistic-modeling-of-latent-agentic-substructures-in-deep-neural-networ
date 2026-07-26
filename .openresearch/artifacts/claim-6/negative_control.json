@@ -1,0 +1,13 @@
+{
+  "clone": {
+    "lambda": 0.0,
+    "child_one_gap": 0.1289745781560655,
+    "child_two_gap": 0.1289745781560655,
+    "detected": true
+  },
+  "incompatible_one_sided_tilt": {
+    "parent_reconstruction_error": 0.4197323054145883,
+    "global_pool_shift": 0.22748908630334636,
+    "detected": true
+  }
+}

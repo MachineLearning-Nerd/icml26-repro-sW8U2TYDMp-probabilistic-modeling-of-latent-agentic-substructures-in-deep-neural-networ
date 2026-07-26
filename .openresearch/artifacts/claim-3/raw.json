@@ -1,0 +1,14 @@
+{
+  "run_id": "685055a4-365c-4743-b4d5-41957d21bc9d",
+  "git_sha": "c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4",
+  "epsilon": 0.00001,
+  "fixtures": [
+    {"n": 2, "weights": [0.5, 0.5], "minimum_gap": 0.00011512454946950386},
+    {"n": 2, "weights": [0.2, 0.8], "minimum_gap": 0.00011167524269923514},
+    {"n": 3, "weights": [0.1, 0.3, 0.6], "minimum_gap": 0.0001151286941131128},
+    {"n": 4, "weights": [0.05, 0.15, 0.3, 0.5], "minimum_gap": 0.00011512915459163134}
+  ],
+  "binary_grid_cases": 24255,
+  "binary_strict_unanimity_cases": 0,
+  "status": "VERIFIED"
+}

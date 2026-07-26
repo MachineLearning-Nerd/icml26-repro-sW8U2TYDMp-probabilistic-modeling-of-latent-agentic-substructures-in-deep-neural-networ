@@ -1,0 +1,6 @@
+{
+  "mutation": "omit the aligned-downweight term from Theorem 19 inequality (3)",
+  "mutated_rhs": 0.033333333333333326,
+  "actual_lhs": 0.0,
+  "detected": true
+}

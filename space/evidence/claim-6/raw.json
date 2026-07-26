@@ -1,0 +1,20 @@
+{
+  "run_id": "685055a4-365c-4743-b4d5-41957d21bc9d",
+  "git_sha": "c2b9aefefc290d44097b4bdd18d5e8e7cf707ba4",
+  "parent": [0.6, 0.3, 0.1],
+  "t": 1.5,
+  "alpha": 0.4,
+  "parent_gap": 0.1289745781560655,
+  "first_negative_lambda": 2.0,
+  "child_one_gaps": [
+    0.1289745781560655,
+    0.12152469761202278,
+    -0.06220809722316578,
+    -0.8070441781772126,
+    -2.6201047099493753,
+    -4.348108207376207
+  ],
+  "maximum_parent_reconstruction_error": 1.1102230246251565e-16,
+  "maximum_global_pool_shift": 5.551115123125783e-17,
+  "status": "VERIFIED"
+}

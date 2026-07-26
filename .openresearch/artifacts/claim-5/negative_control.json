@@ -1,0 +1,4 @@
+{
+  "inside_span": {"u_norm": 0.0, "strict_gain": 0.0, "detected": true},
+  "novel_but_event_orthogonal": {"g_u_inner": 0.0, "strict_gain": 0.0, "detected": true}
+}
