@@ -50,3 +50,11 @@ The current verifier is
 [`reproduction/run_all.py`](../../reproduction/run_all.py); the combined verifier on
 the page titled **Historical rejected baseline** is preserved evidence, not
 the current verification.
+
+Release review: [round 1](../../release/red-team-round1.md) records every
+initial gap; [round 2](../../release/red-team-round2.md) records all 83 opened
+files and a complete pass. The [release report](../../release/release-report.md)
+contains the claim forecast, experiment tree, commands, compute, costs,
+historical subset proof, [upload allowlist](../../release/upload-allowlist.txt),
+[SHA-256 manifest](../../release/upload-manifest.sha256), and exact
+publication action.

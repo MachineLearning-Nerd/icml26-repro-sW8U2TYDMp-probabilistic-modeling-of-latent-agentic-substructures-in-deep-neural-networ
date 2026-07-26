@@ -24,3 +24,9 @@ UTF-8/text allowlist to the existing Space `DineshAI/sW8U2TYDMp` through the
 Hugging Face commit API, verify the returned revision by fresh download, mark
 the paper awaiting judge, and mirror the same reader-facing text to GitHub
 `main`.
+
+Full records: [release report](../../release/release-report.md),
+[blind review round 1](../../release/red-team-round1.md), and
+[blind review round 2](../../release/red-team-round2.md). The release uses an
+exact [UTF-8 allowlist](../../release/upload-allowlist.txt) and
+[SHA-256 manifest](../../release/upload-manifest.sha256).
